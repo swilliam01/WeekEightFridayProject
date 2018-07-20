@@ -34,6 +34,10 @@ public class HomeController {
     @RequestMapping("/")
     public String listPets(Model model)
     {
+        // See if there is a user logged in, if so pass ID to view
+        if(getUser() != null) {
+            model.addAttribute("user_id", getUser().getId());
+        }
         model.addAttribute("pets", petRepository.findAll());
         return "index";
     }
@@ -97,7 +101,7 @@ public class HomeController {
         }
 
         User user = userRepository.findById(new Long(user_id)).get();
-        pet.setUser(getUser());
+        pet.setUser(user);
         petRepository.save(pet);
         return "redirect:/";
     }
@@ -112,6 +116,17 @@ public class HomeController {
         model.addAttribute("imageURL", pet.getImage());
 
         return "form";
+    }
+
+    @RequestMapping("/updatestatus/{id}")
+    public String updateStatus(@ModelAttribute Pet pet, @PathVariable
+            ("id") long id)
+    {
+        // Find pet associated with ID and update status only
+        pet = petRepository.findById(id).get();
+        pet.setStatus("Found");
+        petRepository.save(pet);
+        return "redirect:/";
     }
 
     @RequestMapping("/getUsers")

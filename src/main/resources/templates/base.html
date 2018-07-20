@@ -28,6 +28,10 @@
                 <li sec:authorize="!isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/login">Login</a>
                 </li>
+                <!--Only the admin can see a list of users-->
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
+                    <a class="nav-link" href="/getUsers">Users List</a>
+                </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
@@ -36,7 +40,7 @@
         </nav>
 
         <div class="jumbotron text-center">
-            <h1>Lost Pets</h1>
+            <h1>Help Find our Lost Furry Friends &#9785;</h1>
         </div>
 
     </div>

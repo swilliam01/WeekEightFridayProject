@@ -11,13 +11,15 @@
 
         <hr/>
 
+        <input type="hidden" th:value="${user_id}" name="userID">
+
         <div class="row text-center">
             <div th:each="pet : ${pets}">
 
                 <div class="col-sm-3">
                     <div class="card text-center">
                         <div class="card-header text-center">
-                            <div th:text="${pet.name + ' is Missing!'}"></div>
+                            <strong><div th:text="${pet.name + ' is Missing!'}"></div></strong>
                             <div>Lost on <span th:text="${pet.dateLost}"></span></div>
                         </div>
                         <div class="card-body">
@@ -26,8 +28,15 @@
                             </div>
                             <div th:text="${pet.description}"></div>
                             <strong>Status: <span th:text="${pet.status}"></span></strong>
-                            <a class="card-link btn btn-primary"
-                               th:href="@{/update/{id}(id=${pet.id})}">Update Status</a>
+                            <div sec:authorize="isAuthenticated()">
+                                <p th:if="${pet.status == 'Lost'}">
+                                    <a class="btn btn-success" th:href="@{/updatestatus/{id}(id=${pet.id})}">Mark Found</a>
+                                </p>
+                                <!-- Show update button only if logged in user is the one who created the post or the admin-->
+                                <span th:if="${pet.user.id == user_id || user_id == 2}">
+                                    <a class="btn btn-warning" th:href="@{/update/{id}(id=${pet.id})}">Update Post</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div><!--end div class col-->
