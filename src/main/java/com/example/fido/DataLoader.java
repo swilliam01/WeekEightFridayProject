@@ -1,4 +1,4 @@
-package com.example.listthings;
+package com.example.fido;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,12 +26,12 @@ public class DataLoader implements CommandLineRunner{
 //        Role adminRole = roleRepository.findByRole("ADMIN");
 //        Role userRole = roleRepository.findByRole("USER");
 //
-//        User user = new User("password", "Bob", "Bobberson", true, "bob");
+//        User user = new User("password", "Ed", "Itorial", true, "user");
 //        user.setRoles(Arrays.asList(userRole));
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
 //        userRepository.save(user);
 //
-//        user = new User("password", "Admin", "User", true, "admin");
+//        user = new User("password", "Mal", "Practice", true, "admin");
 //        user.setRoles(Arrays.asList(adminRole));
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
 //        userRepository.save(user);

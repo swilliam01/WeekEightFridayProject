@@ -1,4 +1,4 @@
-package com.example.listthings;
+package com.example.fido;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,9 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     {
         http
                 .authorizeRequests()
+                .antMatchers("/css/**","/img/**").permitAll()
                 .antMatchers("/add").access("hasAnyAuthority('USER', 'ADMIN')")
-                .antMatchers("/showuserprofile").access("hasAuthority('ADMIN')")
-                .antMatchers("/", "/register","/css/**","/img/**").permitAll()
+                .antMatchers("/getUsers").access("hasAuthority('ADMIN')")
+                .antMatchers("/","/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()
@@ -59,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
-        auth
-                .userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
+        auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
     }
 }

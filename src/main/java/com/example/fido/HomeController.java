@@ -1,26 +1,23 @@
-package com.example.listthings;
+package com.example.fido;
 import com.cloudinary.utils.ObjectUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Map;
 
 @Controller
 public class HomeController {
     @Autowired
-    ListingRepository listingRepository;
+    PetRepository petRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -35,9 +32,9 @@ public class HomeController {
     private UserService userService;
 
     @RequestMapping("/")
-    public String listMessages(Model model)
+    public String listPets(Model model)
     {
-        model.addAttribute("listings", listingRepository.findAllByOrderByDate());
+        model.addAttribute("pets", petRepository.findAll());
         return "index";
     }
 
@@ -47,11 +44,6 @@ public class HomeController {
         return "login";
     }
 
-    /**
-     * for new sign up
-     * @param model
-     * @return
-     */
     @GetMapping("/register")
     public String showRegistrationPage(Model model)
     {
@@ -59,13 +51,6 @@ public class HomeController {
         return "registration";
     }
 
-    /**
-     * for new sign up
-     * @param user
-     * @param result
-     * @param model
-     * @return
-     */
     @PostMapping("/register")
     public String processRegistrationPage(@Valid @ModelAttribute User user, BindingResult result, Model model)
     {
@@ -81,32 +66,22 @@ public class HomeController {
         return "redirect:/";
     }
 
-    /**
-     * add new listing
-     * @param model
-     * @return
-     */
     @GetMapping("/add")
-    public String addListing(Model model)
+    public String addPet(Model model)
     {
         model.addAttribute("user_id", getUser().getId());
-        model.addAttribute("listing", new Listing());
+        model.addAttribute("pet", new Pet());
         return "form";
     }
 
-    /**
-     * add new message
-     * @param file
-     * @return
-     */
     @PostMapping("/add")
-    public String processListing(@ModelAttribute Listing listing, @RequestParam("file") MultipartFile file, @RequestParam("hiddenImgURL") String ImgURL, @RequestParam("user_id") String user_id)
+    public String processForm(@ModelAttribute Pet pet, @RequestParam("file") MultipartFile file, @RequestParam("hiddenImgURL") String ImgURL, @RequestParam("userID") String user_id)
     {
         if(!file.isEmpty())
         {
             try {
                 Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
-                listing.setImage(uploadResult.get("url").toString());
+                pet.setImage(uploadResult.get("url").toString());
             } catch (IOException e) {
                 e.printStackTrace();
                 return "form";
@@ -114,65 +89,36 @@ public class HomeController {
         }
         else {
             if(!ImgURL.isEmpty()) {
-                listing.setImage(ImgURL);
+                pet.setImage(ImgURL);
             }
             else {
-                listing.setImage("");
+                pet.setImage("");
             }
         }
 
-        listing.setUser(userRepository.findById(new Long(user_id)).get());
-        listing.setDate();
-        listingRepository.save(listing);
+        User user = userRepository.findById(new Long(user_id)).get();
+        pet.setUser(getUser());
+        petRepository.save(pet);
         return "redirect:/";
     }
 
-    /**
-     * @param id
-     * @param model
-     * @return
-     */
     @RequestMapping("/update/{id}")
-    public String updateListing(@ModelAttribute Listing listing, @PathVariable
+    public String updatePet(@ModelAttribute Pet pet, @PathVariable
             ("id") long id, Model model)
     {
-        listing = listingRepository.findById(id).get();
-        model.addAttribute("user_id", listing.getUser().getId());
-        model.addAttribute("listing", listingRepository.findById(id));
-        model.addAttribute("imageURL", listing.getImage());
-
-        if(listing.getImage().isEmpty()) {
-            model.addAttribute("imageLabel", "Upload Image");
-        }
-        else {
-            model.addAttribute("imageLabel", "Upload New Image");
-        }
+        pet = petRepository.findById(id).get();
+        model.addAttribute("user_id", pet.getUser().getId());
+        model.addAttribute("pet", petRepository.findById(id));
+        model.addAttribute("imageURL", pet.getImage());
 
         return "form";
     }
 
-    /**
-     * delete message by only message owner and admin
-     * @param id
-     * @return
-     */
-    @RequestMapping("/delete/{id}")
-    public String deleteListing(@PathVariable("id") long id)
-    {
-        listingRepository.deleteById(id);
-        return "redirect:/";
-    }
-
-    /**
-     * display all of the users
-     * @param model
-     * @return go to list of users page
-     */
-    @RequestMapping("/showuserprofile")
+    @RequestMapping("/getUsers")
     public String showUserList(Model model)
     {
         model.addAttribute("users", userRepository.findAll());
-        return "userprofile";
+        return "users";
     }
 
     private User getUser(){

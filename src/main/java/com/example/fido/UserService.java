@@ -1,4 +1,4 @@
-package com.example.listthings;
+package com.example.fido;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

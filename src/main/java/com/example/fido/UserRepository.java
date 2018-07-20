@@ -1,4 +1,4 @@
-package com.example.listthings;
+package com.example.fido;
 
 import org.springframework.data.repository.CrudRepository;
 

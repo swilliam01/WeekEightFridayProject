@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Log In</title>
+    <title>Login</title>
     <th:block th:insert="base :: header"></th:block>
 </head>
 <body>
     <div class="container">
 
-        <div th:replace="base :: banner"></div>
+        <div th:replace="base :: nav"></div>
 
         <hr/>
 
@@ -27,8 +27,6 @@
             </div>
             <div><input type="submit" value="Sign In"/></div>
         </form>
-
-        <div th:replace="base :: nav"></div>
 
     </div>
 

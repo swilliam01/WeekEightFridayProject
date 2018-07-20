@@ -1,4 +1,4 @@
-package com.example.listthings;
+package com.example.fido;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -31,7 +31,7 @@ public class User {
     private Collection<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    public Set<Listing> lists;
+    public Set<Pet> lists;
 
     public User() {
     }
@@ -101,11 +101,11 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Listing> getLists() {
+    public Set<Pet> getLists() {
         return lists;
     }
 
-    public void setLists(Set<Listing> lists) {
+    public void setLists(Set<Pet> lists) {
         this.lists = lists;
     }
 }
