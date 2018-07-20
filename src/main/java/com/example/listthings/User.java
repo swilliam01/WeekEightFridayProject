@@ -8,7 +8,7 @@ import java.util.Set;
 @Table(name="USER")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name="password")
@@ -26,7 +26,15 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    public Set<Listing> lists;
+
+    public User() {
+    }
 
     public User(String password, String firstName, String lastName, boolean enabled, String username) {
         this.password = password;
@@ -37,25 +45,6 @@ public class User {
 
     }
 
-    public User() {
-    }
-
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
-    private Collection<Role> roles;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    public Set<Listing> lists;
-
-    public Set<Listing> getMessages() {
-        return lists;
-    }
-
-    public void setMessages(Set<Listing> messages) {
-        this.lists = messages;
-    }
-
     public long getId() {
         return id;
     }
@@ -64,9 +53,7 @@ public class User {
         this.id = id;
     }
 
-
     public String getPassword() {
-
         return password;
     }
 
@@ -112,5 +99,13 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Listing> getLists() {
+        return lists;
+    }
+
+    public void setLists(Set<Listing> lists) {
+        this.lists = lists;
     }
 }

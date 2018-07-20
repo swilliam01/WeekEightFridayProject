@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add New Listing</title>
+    <th:block th:insert="base :: header"></th:block>
 </head>
 <body>
+    <div class="container">
+
+        <div th:replace="base :: banner"></div>
+
+        <hr/>
+
+        <form action="#"
+              th:action="@{/add}"
+              th:object="${listing}"
+              enctype="multipart/form-data"
+              method="post">
+
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:value="${user_id}" name="user_id">
+
+            <div class="form-group">
+                Title: <textarea class="form-text" rows="5" th:field="*{title}"/><br/>
+            </div>
+
+            <div class="form-group">
+                Link: <input type="text" th:field="*{url}"/><br/>
+            </div>
+
+            <div th:if="${imageURL != null}">
+                <img th:src="${imageURL}" alt="image"/>
+            </div>
+
+            <input type="hidden" th:value="${imageURL}" name="hiddenImgURL"/>
+
+            <div class="form-group">
+                Upload Image: <input class="form-control-file" type="file" name="file"/>
+            </div>
+            <input class="submit-btn" type="submit" value="Submit"/>
+        </form>
+
+        <div th:replace="base :: nav"></div>
+    </div>
 
 </body>
 </html>

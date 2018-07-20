@@ -18,19 +18,22 @@ public class DataLoader implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Loading data...**************");
-/*
-        roleRepository.save(new Role("USER"));
-        roleRepository.save(new Role("ADMIN"));
-        Role adminRole = roleRepository.findByRole("ADMIN");
-        Role userRole = roleRepository.findByRole("USER");
-        User user = new User("bob@bob.com", "bob", "Bob", "Bobberson", true, "bob","http://gravatar.com/avatar/a4a6227e8de485098395607980cc1cd4?s=200", "Be Happy");
-        user.setRoles(Arrays.asList(userRole));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        user = new User("admin@admin.com", "pass", "Admin", "User", true, "admin", "http://gravatar.com/avatar/a4a6227e8de485098395607980cc1cd4?s=200", "World peace");
-        user.setRoles(Arrays.asList(adminRole));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);*/
+//        System.out.println("Loading data...**************");
+//
+//        roleRepository.save(new Role("USER"));
+//        roleRepository.save(new Role("ADMIN"));
+//
+//        Role adminRole = roleRepository.findByRole("ADMIN");
+//        Role userRole = roleRepository.findByRole("USER");
+//
+//        User user = new User("password", "Bob", "Bobberson", true, "bob");
+//        user.setRoles(Arrays.asList(userRole));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        userRepository.save(user);
+//
+//        user = new User("password", "Admin", "User", true, "admin");
+//        user.setRoles(Arrays.asList(adminRole));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        userRepository.save(user);
     }
 }

@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="header">
+    <meta charset="UTF-8"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 <body>
+
+    <div th:fragment="banner">
+        <h2 class="text-info"><strong>LisTings</strong></h2>
+    </div>
+
+    <div th:fragment="nav">
+        <hr/>
+        <div sec:authorize="isAuthenticated()">
+            <a href="/add">Add New Listing</a><br>
+
+            Logged in as: <span sec:authentication="name"></span><br>
+
+            <a href="/logout">Logout</a>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a href="/showuserprofile" class="badge badge-warning">
+                    <h3><Strong>User List</Strong></h3>
+                </a>
+            </div>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login">Login</a>
+            <a href="/register">Signup</a>
+        </div>
+    </div>
 
 </body>
 </html>

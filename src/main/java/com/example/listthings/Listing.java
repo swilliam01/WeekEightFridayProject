@@ -8,17 +8,12 @@ import java.util.Date;
 @Entity
 public class Listing {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
-    @Size(min = 2)
-    private String content;
-
-    @NotNull
-    @Size(min = 1)
+    private String title;
+    private String url;
     private Date date;
-
     private String image;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,20 +28,28 @@ public class Listing {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getTitle() {
+        return title;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate() {
+        this.date = new Date();
     }
 
     public String getImage() {

@@ -1,0 +1,45 @@
+LisTings (Reddit Clone)
+Due No Due Date  Points 10  Submitting a website url
+Reddit has become the one of the most popular sites on the internet. Your team has been tasked with creating a minireddit or a reddit clone called ListTings for the CodeWork Academy students. 
+
+Your site should have a home page that lists user supplied links that look like:
+
+ 
+
+ProjectReddit  AddLink                                                     
+
+----------------------------------------------------------------------
+
+13 Great Reasons to Learn Java
+submitted by Daylin
+May 31, 2017
+
+The Best MOBA is NOT Smite
+submitted by Daylin
+May 31, 2017
+
+etc.
+
+All links should be saved to the database. 
+
+The links should be listed by most recently added link first on the page.
+
+Each submission should include a title and a url, and the url should be clickable when displayed as a list. Further the links should open in a new tab when clicked.
+
+Be careful and plan things out before you start coding!
+
+DONE ALREADY
+
+Got everything working? Start reading documentation about rendering dates differently from how it's initially presented. Make it work for you! 
+
+Format: Month, Day, Year
+
+http://www.baeldung.com/dates-in-thymeleaf (Links to an external site.)Links to an external site.
+
+ 
+
+Update: 
+
+Allow a user to enter an image for the URL. If the image exists, BOTH the image AND the title should be clickable.
+
+Otherwise just the title should be clickable.

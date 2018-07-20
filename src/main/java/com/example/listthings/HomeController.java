@@ -3,6 +3,7 @@ import com.cloudinary.utils.ObjectUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,11 +38,11 @@ public class HomeController {
     public String listMessages(Model model)
     {
         model.addAttribute("listings", listingRepository.findAllByOrderByDate());
-        return "list";
+        return "index";
     }
 
     @GetMapping("/login")
-    public String login(Model model)
+    public String login()
     {
         return "login";
     }
@@ -51,7 +52,7 @@ public class HomeController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @GetMapping("/register")
     public String showRegistrationPage(Model model)
     {
         model.addAttribute("user", new User());
@@ -65,8 +66,8 @@ public class HomeController {
      * @param model
      * @return
      */
-    @RequestMapping(value="/register", method=RequestMethod.POST)
-    public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model)
+    @PostMapping("/register")
+    public String processRegistrationPage(@Valid @ModelAttribute User user, BindingResult result, Model model)
     {
         model.addAttribute("user", user);
         if (result.hasErrors())
@@ -76,134 +77,89 @@ public class HomeController {
         else
         {
             userService.saveUser(user);
-            model.addAttribute("message", "User Account Successfully Created");
         }
         return "redirect:/";
     }
 
     /**
-     * add new messge
+     * add new listing
      * @param model
-     * @param request
-     * @param authentication
-     * @param principal
      * @return
      */
     @GetMapping("/add")
-    public String addListing(Model model, HttpServletRequest request, Authentication authentication, Principal principal)
+    public String addListing(Model model)
     {
+        model.addAttribute("user_id", getUser().getId());
         model.addAttribute("listing", new Listing());
         return "form";
     }
 
     /**
      * add new message
-     * @param result
      * @param file
-     * @param request
-     * @param authentication
-     * @param principal
      * @return
      */
     @PostMapping("/add")
-    public String processMessage(@Valid @ModelAttribute("message") Listing listing, BindingResult result,
-                                 @RequestParam("file") MultipartFile file, HttpServletRequest request, Authentication authentication, Principal principal)
+    public String processListing(@ModelAttribute Listing listing, @RequestParam("file") MultipartFile file, @RequestParam("hiddenImgURL") String ImgURL, @RequestParam("user_id") String user_id)
     {
-        Boolean isAdmin = request.isUserInRole("ADMIN");
-        Boolean isUser = request.isUserInRole("USER");
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String username = principal.getName();
-        if(result.hasErrors())
+        if(!file.isEmpty())
         {
-            return "form";
-        }
-        if(file.isEmpty())
-        {
-            listingRepository.save(listing);
-            listing.setUser(userRepository.findByUsername(username));
-            listingRepository.save(listing);
-        }
-        else {
             try {
                 Map uploadResult = cloudc.upload(file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
                 listing.setImage(uploadResult.get("url").toString());
-                listingRepository.save(listing);
-                listing.setUser(userRepository.findByUsername(username));
-                listingRepository.save(listing);
             } catch (IOException e) {
                 e.printStackTrace();
-                return "redirect:/add";
+                return "form";
             }
-            listingRepository.save(listing);
+        }
+        else {
+            if(!ImgURL.isEmpty()) {
+                listing.setImage(ImgURL);
+            }
+            else {
+                listing.setImage("");
+            }
         }
 
+        listing.setUser(userRepository.findById(new Long(user_id)).get());
+        listing.setDate();
+        listingRepository.save(listing);
         return "redirect:/";
     }
 
     /**
-     * update user profile
-     * @param model
-     * @param request
-     * @param authentication
-     * @param principal
-     * @return registration
-     */
-    @RequestMapping("/viewUser")
-    public String viewUser(Model model, HttpServletRequest request, Authentication authentication, Principal principal)
-    {
-        Boolean isAdmin = request.isUserInRole("ADMIN");
-        Boolean isUser = request.isUserInRole("USER");
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String username = principal.getName();
-        model.addAttribute("user", userRepository.findByUsername(username));
-        return "registration";
-    }
-
-    /**
-     * update messge by only message owner and admin
      * @param id
      * @param model
-     * @param request
-     * @param authentication
-     * @param principal
      * @return
      */
     @RequestMapping("/update/{id}")
-    public String updateMessage(@PathVariable("id") long id, Model model, HttpServletRequest request, Authentication authentication, Principal principal)
+    public String updateListing(@ModelAttribute Listing listing, @PathVariable
+            ("id") long id, Model model)
     {
-        Boolean isAdmin = request.isUserInRole("ADMIN");
-        Boolean isUser = request.isUserInRole("USER");
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String username = principal.getName();
-        if(username.equals(listingRepository.findById(id).get().getUser().getUsername())|| username.equalsIgnoreCase("ADMIN")) {
-            model.addAttribute("listing", listingRepository.findById(id));
-            return "form";
+        listing = listingRepository.findById(id).get();
+        model.addAttribute("user_id", listing.getUser().getId());
+        model.addAttribute("listing", listingRepository.findById(id));
+        model.addAttribute("imageURL", listing.getImage());
+
+        if(listing.getImage().isEmpty()) {
+            model.addAttribute("imageLabel", "Upload Image");
         }
-        else
-        {
-            return "redirect:/";
+        else {
+            model.addAttribute("imageLabel", "Upload New Image");
         }
+
+        return "form";
     }
 
     /**
      * delete message by only message owner and admin
      * @param id
-     * @param request
-     * @param authentication
-     * @param principal
      * @return
      */
     @RequestMapping("/delete/{id}")
-    public String deleteMessage(@PathVariable("id") long id, HttpServletRequest request, Authentication authentication, Principal principal)
+    public String deleteListing(@PathVariable("id") long id)
     {
-        Boolean isAdmin = request.isUserInRole("ADMIN");
-        Boolean isUser = request.isUserInRole("USER");
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        String username = principal.getName();
-        if(username.equals(listingRepository.findById(id).get().getUser().getUsername())|| username.equalsIgnoreCase("ADMIN"))
-        {
-            listingRepository.deleteById(id);
-        }
+        listingRepository.deleteById(id);
         return "redirect:/";
     }
 
@@ -217,6 +173,13 @@ public class HomeController {
     {
         model.addAttribute("users", userRepository.findAll());
         return "userprofile";
+    }
+
+    private User getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentusername = authentication.getName();
+        User user = userRepository.findByUsername(currentusername);
+        return user;
     }
 
 }

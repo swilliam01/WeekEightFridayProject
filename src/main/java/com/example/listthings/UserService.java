@@ -22,16 +22,6 @@ public class UserService {
         this.userRepository=userRepository;
     }
 
-    public User findByEmail(String email)
-    {
-        return userRepository.findByEmail(email);
-    }
-
-    public Long countByEmail(String email)
-    {
-        return userRepository.countByEmail(email);
-    }
-
     public User findByUsername(String username)
     {
         return userRepository.findByUsername(username);
