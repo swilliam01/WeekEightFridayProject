@@ -30,9 +30,6 @@ public class User {
     @JoinTable(joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
     private Collection<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    public Set<Pet> lists;
-
     public User() {
     }
 
@@ -101,11 +98,4 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Pet> getLists() {
-        return lists;
-    }
-
-    public void setLists(Set<Pet> lists) {
-        this.lists = lists;
-    }
 }

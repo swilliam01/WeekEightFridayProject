@@ -35,8 +35,8 @@ public class HomeController {
     public String listPets(Model model)
     {
         // See if there is a user logged in, if so pass ID to view
-        if(getUser() != null) {
-            model.addAttribute("user_id", getUser().getId());
+        if(userService.getUser() != null) {
+            model.addAttribute("user_id", userService.getUser().getId());
         }
         model.addAttribute("pets", petRepository.findAll());
         return "index";
@@ -73,7 +73,7 @@ public class HomeController {
     @GetMapping("/add")
     public String addPet(Model model)
     {
-        model.addAttribute("user_id", getUser().getId());
+        model.addAttribute("user_id", userService.getUser().getId());
         model.addAttribute("pet", new Pet());
         return "form";
     }
@@ -136,11 +136,6 @@ public class HomeController {
         return "users";
     }
 
-    private User getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentusername = authentication.getName();
-        User user = userRepository.findByUsername(currentusername);
-        return user;
-    }
+
 
 }
