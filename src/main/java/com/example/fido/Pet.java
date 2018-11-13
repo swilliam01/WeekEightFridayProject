@@ -3,6 +3,8 @@ package com.example.fido;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -12,6 +14,7 @@ public class Pet {
     private long id;
 
     @NotNull
+    @Size(min=3)
     private String name;
 
     @NotNull
@@ -21,9 +24,11 @@ public class Pet {
     private String image;
 
     @NotNull
+    @Size(min=3)
     private String description;
 
     @NotNull
+    @Pattern(regexp = "(Lost|Found)")
     private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)

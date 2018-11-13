@@ -84,12 +84,13 @@ public class HomeController {
                               @RequestParam("file") MultipartFile file,
                               HttpServletRequest request)
     {
-        String ImgURL = request.getParameter("hiddenImgURL");
-        LocalDate dateLost = LocalDate.parse(request.getParameter("dateLost"));
 
         if(result.hasErrors()){
             return "form";
         }
+
+        String ImgURL = request.getParameter("hiddenImgURL");
+        LocalDate dateLost = LocalDate.parse(request.getParameter("dateLost"));
 
         if(!file.isEmpty())
         {

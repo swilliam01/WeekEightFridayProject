@@ -58,3 +58,7 @@ a.nav-link {
     border-radius: 7px;
     margin: 3px;
 }
+
+.form-error{
+    color: red;
+}

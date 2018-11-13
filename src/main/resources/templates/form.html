@@ -19,8 +19,9 @@
 
         <div class="form-group">
             <label for="name">Name:</label>
+            <span class="form-error" th:if="${#fields.hasErrors('name')}"
+                  th:errors="*{name}"></span>
             <input class="form-control" type="text" id="name" th:field="*{name}"/>
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         </div>
 
         <div class="form-group">
@@ -28,23 +29,23 @@
             <input class="form-control-sm" type="date"
                    th:value="${#dates.createNow()}"
                    id="dateLost" name="dateLost" th:field="*{dateLost}"/>
-            <span th:if="${#fields.hasErrors('dateLost')}" th:errors="*{dateLost}"></span>
+            <span class="form-error" th:if="${#fields.hasErrors('dateLost')}" th:errors="*{dateLost}"></span>
         </div>
 
         <div class="form-group">
             <label for="description">Description:</label>
+            <span class="form-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
             <input class="form-control" type="text" id="description" th:field="*{description}"/>
-            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
         </div>
 
         <div class="form-group">
             <label for="status">Status:</label>
+            <span class="form-error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
             <select class="form-control" type="text" id="status" th:field="*{status}">
                 <option value="">Select</option>
                 <option value="Lost">Lost</option>
                 <option value="Found">Found</option>
             </select>
-            <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
         </div>
 
         <div th:if="${imageURL != null}">
