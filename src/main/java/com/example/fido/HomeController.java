@@ -2,16 +2,16 @@ package com.example.fido;
 import com.cloudinary.utils.ObjectUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Controller
@@ -73,14 +73,23 @@ public class HomeController {
     @GetMapping("/add")
     public String addPet(Model model)
     {
-        model.addAttribute("user_id", userService.getUser().getId());
         model.addAttribute("pet", new Pet());
         return "form";
     }
 
     @PostMapping("/add")
-    public String processForm(@ModelAttribute Pet pet, @RequestParam("file") MultipartFile file, @RequestParam("hiddenImgURL") String ImgURL, @RequestParam("userID") String user_id)
+    public String processForm(@Valid @ModelAttribute("pet") Pet pet,
+                              BindingResult result,
+                              @RequestParam("file") MultipartFile file,
+                              HttpServletRequest request)
     {
+        String ImgURL = request.getParameter("hiddenImgURL");
+        LocalDate dateLost = LocalDate.parse(request.getParameter("dateLost"));
+
+        if(result.hasErrors()){
+            return "form";
+        }
+
         if(!file.isEmpty())
         {
             try {
@@ -100,30 +109,27 @@ public class HomeController {
             }
         }
 
-        User user = userRepository.findById(new Long(user_id)).get();
-        pet.setUser(user);
+        pet.setDateLost(dateLost);
+        pet.setUser(userService.getUser());
         petRepository.save(pet);
         return "redirect:/";
     }
 
     @RequestMapping("/update/{id}")
-    public String updatePet(@ModelAttribute Pet pet, @PathVariable
-            ("id") long id, Model model)
+    public String updatePet(@PathVariable ("id") long id, Model model)
     {
-        pet = petRepository.findById(id).get();
-        model.addAttribute("user_id", pet.getUser().getId());
-        model.addAttribute("pet", petRepository.findById(id));
+        Pet pet = petRepository.findById(id).get();
         model.addAttribute("imageURL", pet.getImage());
+        model.addAttribute("pet", pet);
 
         return "form";
     }
 
     @RequestMapping("/updatestatus/{id}")
-    public String updateStatus(@ModelAttribute Pet pet, @PathVariable
-            ("id") long id)
+    public String updateStatus(@PathVariable("id") long id)
     {
         // Find pet associated with ID and update status only
-        pet = petRepository.findById(id).get();
+        Pet pet = petRepository.findById(id).get();
         pet.setStatus("Found");
         petRepository.save(pet);
         return "redirect:/";

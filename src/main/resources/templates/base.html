@@ -13,7 +13,7 @@
 
             <!-- Links -->
             <ul class="navbar-nav">
-                <li sec:authorize="isAuthenticated()" class="nav-item">
+                <li sec:authorize="isAuthenticated()" class="nav-item nav-link">
                     Welcome <span th:text="${#authentication.name}"></span>!
                 </li>
                 <li class="nav-item">

@@ -1,6 +1,9 @@
 package com.example.fido;
-import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 public class Pet {
@@ -8,15 +11,36 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private String name;
-    private String dateLost;
+
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateLost;
+
     private String image;
+
+    @NotNull
     private String description;
+
+    @NotNull
     private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Pet() {
+    }
+
+    public Pet(@NotNull String name, @NotNull LocalDate dateLost, String image, @NotNull String description, @NotNull String status, User user) {
+        this.name = name;
+        this.dateLost = dateLost;
+        this.image = image;
+        this.description = description;
+        this.status = status;
+        this.user = user;
+    }
 
     public long getId() {
         return id;
@@ -34,11 +58,11 @@ public class Pet {
         this.name = name;
     }
 
-    public String getDateLost() {
+    public LocalDate getDateLost() {
         return dateLost;
     }
 
-    public void setDateLost(String dateLost) {
+    public void setDateLost(LocalDate dateLost) {
         this.dateLost = dateLost;
     }
 

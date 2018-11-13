@@ -12,26 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
-@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-
-    @Bean
-    public PasswordEncoder encoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    private SSUserDetailService userDetailsService;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception
-    {
-        return new SSUserDetailService(userRepository);
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
@@ -55,11 +36,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .csrf().disable();
         http
                 .headers().frameOptions().disable();
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
-        auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
     }
 }

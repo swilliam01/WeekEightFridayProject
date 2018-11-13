@@ -29,11 +29,12 @@
                             <div th:text="${pet.description}"></div>
                             <strong>Status: <span th:text="${pet.status}"></span></strong>
                             <div sec:authorize="isAuthenticated()">
-                                <p th:if="${pet.status == 'Lost'}">
-                                    <a class="btn btn-success" th:href="@{/updatestatus/{id}(id=${pet.id})}">Mark Found</a>
-                                </p>
-                                <!-- Show update button only if logged in user is the one who created the post or the admin-->
+                                <!-- Show update/mark found button only if
+                                logged in user is the one who created the post or the admin-->
                                 <span th:if="${pet.user.id == user_id || user_id == 2}">
+                                    <p th:if="${pet.status == 'Lost'}">
+                                        <a class="btn btn-success" th:href="@{/updatestatus/{id}(id=${pet.id})}">Mark Found</a>
+                                    </p>
                                     <a class="btn btn-warning" th:href="@{/update/{id}(id=${pet.id})}">Update Post</a>
                                 </span>
                             </div>
