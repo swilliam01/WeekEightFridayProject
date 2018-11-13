@@ -25,7 +25,7 @@
 
         <div class="form-group">
             <label for="dateLost">Date Lost:</label>
-            <input class="form-control-sm" type="date"
+            <input class="form-control-sm" type="date" value="2018-11-13"
                    th:value="${#dates.createNow()}"
                    id="dateLost" name="dateLost" th:field="*{dateLost}"/>
             <span th:if="${#fields.hasErrors('dateLost')}" th:errors="*{dateLost}"></span>
@@ -55,7 +55,7 @@
 
         <div class="form-group">
             <input class="form-control-file" type="file" name="file"/>
-            (Upload new or change image)
+            (Update or add new photo)
         </div>
 
         <input class="submit-btn" type="submit" value="Submit"/>

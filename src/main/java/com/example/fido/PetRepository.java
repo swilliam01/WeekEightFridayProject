@@ -2,6 +2,8 @@ package com.example.fido;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface PetRepository extends CrudRepository<Pet, Long>{
+import java.util.ArrayList;
 
+public interface PetRepository extends CrudRepository<Pet, Long>{
+  ArrayList<Pet> findAllByStatus(String status);
 }

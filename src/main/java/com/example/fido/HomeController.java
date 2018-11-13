@@ -56,7 +56,8 @@ public class HomeController {
     }
 
     @PostMapping("/register")
-    public String processRegistrationPage(@Valid @ModelAttribute User user, BindingResult result, Model model)
+    public String processRegistrationPage(@Valid @ModelAttribute("user") User user,
+            BindingResult result, Model model)
     {
         model.addAttribute("user", user);
         if (result.hasErrors())
@@ -140,6 +141,18 @@ public class HomeController {
     {
         model.addAttribute("users", userRepository.findAll());
         return "users";
+    }
+
+    @RequestMapping("/lostPets")
+    public String getLostPets(Model model){
+        model.addAttribute("pets", petRepository.findAllByStatus("Lost"));
+        return "index";
+    }
+
+    @RequestMapping("/foundPets")
+    public String getFoundPets(Model model){
+        model.addAttribute("pets", petRepository.findAllByStatus("Found"));
+        return "index";
     }
 
 
