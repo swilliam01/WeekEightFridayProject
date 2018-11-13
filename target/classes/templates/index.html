@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home</title>
+    <th:block th:insert="base :: header"></th:block>
+</head>
+<body>
+    <div class="container">
+
+        <div th:replace="base :: nav"></div>
+
+        <hr/>
+
+        <input type="hidden" th:value="${user_id}" name="userID">
+
+        <div class="row text-center">
+            <div th:each="pet : ${pets}">
+
+                <div class="col-sm-3">
+                    <div class="card text-center">
+                        <div class="card-header text-center">
+                            <strong><div th:text="${pet.name + ' is Missing!'}"></div></strong>
+                            <div>Lost on <span th:text="${pet.dateLost}"></span></div>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${pet.image != ''}">
+                                <img class="card-img-top user-img" th:src="${pet.image}" alt="pet">
+                            </div>
+                            <div th:text="${pet.description}"></div>
+                            <strong>Status: <span th:text="${pet.status}"></span></strong>
+                            <div sec:authorize="isAuthenticated()">
+                                <!-- Show update/mark found button only if
+                                logged in user is the one who created the post or the admin-->
+                                <span th:if="${pet.user.id == user_id || user_id == 2}">
+                                    <p th:if="${pet.status == 'Lost'}">
+                                        <a class="btn btn-success" th:href="@{/updatestatus/{id}(id=${pet.id})}">Mark Found</a>
+                                    </p>
+                                    <a class="btn btn-warning" th:href="@{/update/{id}(id=${pet.id})}">Update Post</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end div class col-->
+
+            </div><!--end div th:each-->
+        </div><!--end div class row-->
+
+    </div>
+
+</body>
+</html>

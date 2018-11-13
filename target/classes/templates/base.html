@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="header">
+    <meta charset="UTF-8"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <div th:fragment="nav">
+
+        <nav class="navbar navbar-expand-sm bg-light fixed-top">
+
+            <!-- Links -->
+            <ul class="navbar-nav">
+                <li sec:authorize="isAuthenticated()" class="nav-item nav-link">
+                    Welcome <span th:text="${#authentication.name}"></span>!
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/add">Add Lost Pet</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <!--Only the admin can see a list of users-->
+                <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
+                    <a class="nav-link" href="/getUsers">Users List</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+
+        </nav>
+
+        <div class="jumbotron text-center">
+            <h1>Help Find our Lost Furry Friends &#9785;</h1>
+        </div>
+
+    </div>
+
+</body>
+</html>

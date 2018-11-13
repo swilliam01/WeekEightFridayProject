@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Post or Update Pet Listing</title>
+    <th:block th:insert="base :: header"></th:block>
+</head>
+<body>
+    <div th:replace="base :: nav"></div>
+
+    <p/>
+
+    <form action="#"
+          th:action="@{/add}"
+          th:object="${pet}"
+          enctype="multipart/form-data"
+          method="post">
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input class="form-control" type="text" id="name" th:field="*{name}"/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="dateLost">Date Lost:</label>
+            <input class="form-control-sm" type="date"
+                   th:value="${#dates.createNow()}"
+                   id="dateLost" name="dateLost" th:field="*{dateLost}"/>
+            <span th:if="${#fields.hasErrors('dateLost')}" th:errors="*{dateLost}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input class="form-control" type="text" id="description" th:field="*{description}"/>
+            <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select class="form-control" type="text" id="status" th:field="*{status}">
+                <option value="">Select</option>
+                <option value="Lost">Lost</option>
+                <option value="Found">Found</option>
+            </select>
+            <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+        </div>
+
+        <div th:if="${imageURL != null}">
+            <img th:src="${imageURL}" alt="pet"/>
+        </div>
+
+        <input type="hidden" th:value="${imageURL}" name="hiddenImgURL"/>
+
+        <div class="form-group">
+            <input class="form-control-file" type="file" name="file"/>
+            (Upload new or change image)
+        </div>
+
+        <input class="submit-btn" type="submit" value="Submit"/>
+    </form>
+
+</body>
+</html>
